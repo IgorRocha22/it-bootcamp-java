@@ -3,11 +3,14 @@ package com.consulta.covid.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.consulta.covid.model.Sintoma;
 import com.consulta.covid.model.repository.SintomaRepository;
 
+@Service
 public class SintomaService {
+
 	@Autowired
 	private SintomaRepository repository;
 

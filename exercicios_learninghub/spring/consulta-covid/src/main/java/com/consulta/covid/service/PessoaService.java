@@ -3,11 +3,13 @@ package com.consulta.covid.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.consulta.covid.model.Pessoa;
 import com.consulta.covid.model.Sintoma;
 import com.consulta.covid.model.repository.PessoaRepository;
 
+@Service
 public class PessoaService {
 
 	@Autowired
@@ -21,6 +23,7 @@ public class PessoaService {
 
 	public boolean insert(Pessoa pessoa) {
 		valida(pessoa);
+		fetchSintomas(pessoa);
 		return repository.insert(pessoa);
 	}
 
@@ -34,15 +37,21 @@ public class PessoaService {
 		if (pessoa.getNome() == null || pessoa.getNome().isEmpty()) {
 			throw new RuntimeException("Nome não informado");
 		}
-		validaSintomas(pessoa);
+		if (pessoa.getIdade() == null || pessoa.getIdade() < 0) {
+			throw new RuntimeException("Idade inválida");
+		}
 	}
 
-	private void validaSintomas(Pessoa pessoa) {
+	private void fetchSintomas(Pessoa pessoa) {
 		for (Sintoma sintoma : pessoa.getSintomas()) {
-			if (sintoma.getCodigo() == null) {
-				throw new RuntimeException("Código não informado");
-			}
-			sintomaService.findById(sintoma.getCodigo());
+			validaSintoma(sintoma);
+			sintoma = sintomaService.findById(sintoma.getCodigo());
+		}
+	}
+
+	private void validaSintoma(Sintoma sintoma) {
+		if (sintoma.getCodigo() == null) {
+			throw new RuntimeException("Código não informado");
 		}
 	}
 }

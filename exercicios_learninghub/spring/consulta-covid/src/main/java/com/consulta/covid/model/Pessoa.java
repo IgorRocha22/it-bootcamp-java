@@ -67,4 +67,10 @@ public class Pessoa {
 		return this.sintomas.add(sintoma);
 	}
 
+	@Override
+	public String toString() {
+		return "Pessoa [id=" + id + ", nome=" + nome + ", sobrenome=" + sobrenome + ", idade=" + idade + ", sintomas="
+				+ sintomas + "]";
+	}
+
 }
