@@ -1,8 +1,11 @@
 package br.com.concessionaria.dto;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import br.com.concessionaria.model.Car;
+import br.com.concessionaria.model.Service;
 
 public class CarDTO {
 
@@ -14,8 +17,8 @@ public class CarDTO {
 	private int doors;
 	private double price;
 	private String currency;
-	// private List<Service> services;
 	private int countOfOwners;
+	private List<Service> services;
 
 	public CarDTO(Car car) {
 		this.id = car.getId();
@@ -27,6 +30,7 @@ public class CarDTO {
 		this.price = car.getPrice();
 		this.currency = car.getCurrency();
 		this.countOfOwners = car.getCountOfOwners();
+		this.services = car.getServices();
 	}
 
 	public CarDTO(Integer id, String brand, String model, LocalDate manifacturingDate, int numberOfKilometers,
@@ -40,6 +44,7 @@ public class CarDTO {
 		this.price = price;
 		this.currency = currency;
 		this.countOfOwners = countOfOwners;
+		this.services = new ArrayList<Service>();
 	}
 
 	public Integer getId() {
@@ -112,6 +117,14 @@ public class CarDTO {
 
 	public void setCountOfOwners(int countOfOwners) {
 		this.countOfOwners = countOfOwners;
+	}
+
+	public List<Service> getServices() {
+		return services;
+	}
+
+	public void setServices(List<Service> services) {
+		this.services = services;
 	}
 
 }
