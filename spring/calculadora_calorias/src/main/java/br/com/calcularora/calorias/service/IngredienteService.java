@@ -17,7 +17,7 @@ public class IngredienteService implements IIngredienteService {
 
 	public List<Ingrediente> fetchIngredientes(List<Ingrediente> ingredientesPrato) {
 		List<Ingrediente> ingredientes = new ArrayList<Ingrediente>();
-		for (String nome : ingredientesPrato.stream().map(Ingrediente::getName).toList()) {
+		for (String nome : ingredientesPrato.stream().map(Ingrediente::getNome).toList()) {
 			Ingrediente i = repository.findByName(nome.toLowerCase());
 			if (i != null) {
 				ingredientes.add(i);

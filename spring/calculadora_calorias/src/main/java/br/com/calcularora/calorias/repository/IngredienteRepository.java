@@ -47,6 +47,6 @@ public class IngredienteRepository {
 	}
 
 	public Ingrediente findByName(String name) {
-		return ingredientes.stream().filter(c -> c.getName().toLowerCase().contains(name)).findFirst().orElse(null);
+		return ingredientes.stream().filter(c -> c.getNome().toLowerCase().contains(name)).findFirst().orElse(null);
 	}
 }

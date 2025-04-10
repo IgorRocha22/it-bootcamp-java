@@ -23,9 +23,9 @@ public class PratoService implements IPratoService {
 		List<Ingrediente> ingredientes = ingredienteService.fetchIngredientes(dto.getIngredientes());
 		Prato prato = new Prato(dto.getNome(), dto.getPeso(), ingredientes);
 		repository.addPrato(prato);
-		int totalCalorias = prato.getIngredientes().stream().mapToInt(Ingrediente::getCalories).sum();
+		int totalCalorias = prato.getIngredientes().stream().mapToInt(Ingrediente::getCalorias).sum();
 		Optional<Ingrediente> ingredienteMaiorCaloria = prato.getIngredientes().stream()
-				.sorted((o1, o2) -> o2.getCalories() - o1.getCalories()).findFirst();
+				.sorted((o1, o2) -> o2.getCalorias() - o1.getCalorias()).findFirst();
 		return new PratoDTO(prato.getNome(), prato.getPeso(), prato.getIngredientes(), totalCalorias,
 				ingredienteMaiorCaloria.get());
 	}
