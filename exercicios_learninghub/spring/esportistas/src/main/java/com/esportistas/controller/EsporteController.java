@@ -69,6 +69,8 @@ public class EsporteController {
 	}
 	
 	private void mock() {
+		repository.removeAll();
+		pessoaRepo.removeAll();
 		repository.insert(new Esporte(1, "Futebol", "Avancado"));
 		repository.insert(new Esporte(2, "Voleibol", "Avancado"));
 		repository.insert(new Esporte(3, "Futebol", "Iniciante"));

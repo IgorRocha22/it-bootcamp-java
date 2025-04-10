@@ -28,4 +28,8 @@ public class EsporteRepository {
 	public boolean insert(Esporte esporte) {
 		return esportes.add(esporte);
 	}
+	
+	public void removeAll() {
+		esportes = new HashSet<Esporte>();
+	}
 }

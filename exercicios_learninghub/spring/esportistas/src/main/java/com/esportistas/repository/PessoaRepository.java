@@ -38,4 +38,9 @@ public class PessoaRepository {
 	public boolean insert(Pessoa pessoa) {
 		return pessoas.add(pessoa);
 	}
+	
+	public void removeAll() {
+		pessoas = new HashSet<Pessoa>();
+	}
+	
 }
