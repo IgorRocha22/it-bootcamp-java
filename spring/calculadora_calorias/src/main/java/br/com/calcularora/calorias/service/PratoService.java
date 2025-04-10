@@ -1,7 +1,6 @@
 package br.com.calcularora.calorias.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,12 +21,27 @@ public class PratoService implements IPratoService {
 	public PratoDTO inserePrato(PratoDTO dto) {
 		List<Ingrediente> ingredientes = ingredienteService.fetchIngredientes(dto.getIngredientes());
 		Prato prato = new Prato(dto.getNome(), dto.getPeso(), ingredientes);
-		repository.addPrato(prato);
-		int totalCalorias = prato.getIngredientes().stream().mapToInt(Ingrediente::getCalorias).sum();
-		Optional<Ingrediente> ingredienteMaiorCaloria = prato.getIngredientes().stream()
-				.sorted((o1, o2) -> o2.getCalorias() - o1.getCalorias()).findFirst();
-		return new PratoDTO(prato.getNome(), prato.getPeso(), prato.getIngredientes(), totalCalorias,
-				ingredienteMaiorCaloria.get());
+		repository.inserePrato(prato);
+		return constroiDto(prato);
+	}
+
+	@Override
+	public List<PratoDTO> inserePratos(List<PratoDTO> dtos) {
+		return dtos.stream().map(this::inserePrato).toList();
+	}
+
+	private PratoDTO constroiDto(Prato prato) {
+		PratoDTO responseDto = new PratoDTO(prato.getNome(), prato.getPeso(), prato.getIngredientes());
+		realizaCalculosIngrediente(prato, responseDto);
+		return responseDto;
+	}
+
+	private void realizaCalculosIngrediente(Prato prato, PratoDTO responseDto) {
+		Integer totalCalorias = ingredienteService.calculaTotalCalorias(prato.getIngredientes());
+		Ingrediente ingredienteMaiorCaloria = ingredienteService
+				.recuperaIngredienteMaiorCaloria(prato.getIngredientes());
+		responseDto.setTotalCalorias(totalCalorias);
+		responseDto.setIngredienteMaiorCaloria(ingredienteMaiorCaloria);
 	}
 
 }

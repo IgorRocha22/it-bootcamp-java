@@ -1,5 +1,7 @@
 package br.com.calcularora.calorias.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,4 +22,10 @@ public class PratoController {
 	public ResponseEntity<PratoDTO> inserePrato(@RequestBody PratoDTO prato) {
 		return ResponseEntity.ok(service.inserePrato(prato));
 	}
+
+	@PostMapping("/lista")
+	public ResponseEntity<List<PratoDTO>> inserePratos(@RequestBody List<PratoDTO> pratos) {
+		return ResponseEntity.ok(service.inserePratos(pratos));
+	}
+
 }

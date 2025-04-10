@@ -35,6 +35,10 @@ public class IngredienteRepository {
 		return ingredientesJson;
 	}
 
+	public Ingrediente findByName(String name) {
+		return ingredientes.stream().filter(c -> c.getNome().toLowerCase().contains(name)).findFirst().orElse(null);
+	}
+
 	private List<Ingrediente> readJsonFile(ObjectMapper objectMapper, List<Ingrediente> ingredientesJson) {
 		try {
 			ingredientesJson = objectMapper.readValue(new File("src/main/resources/static/ingredientes.json"),
@@ -46,7 +50,4 @@ public class IngredienteRepository {
 		return ingredientesJson;
 	}
 
-	public Ingrediente findByName(String name) {
-		return ingredientes.stream().filter(c -> c.getNome().toLowerCase().contains(name)).findFirst().orElse(null);
-	}
 }

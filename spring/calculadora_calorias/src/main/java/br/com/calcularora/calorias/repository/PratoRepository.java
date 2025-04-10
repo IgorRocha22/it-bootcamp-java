@@ -19,18 +19,11 @@ public class PratoRepository {
 	private PratoRepository getInstance() {
 		if (repository == null) {
 			this.pratos = new ArrayList<Prato>();
-			/*
-			 * this.pratos = List.of(new Prato("Strogonoff", 500,
-			 * buildIngredientes("Mostaza", "Ketchup", "Pollo")), new
-			 * Prato("Especial do Chefe", 2500, buildIngredientes("Queso Brie",
-			 * "Dátil seco", "Champiñón y otras setas", "Salchichón",
-			 * "Sardina en lata con aceite vegetal")));
-			 */
 		}
 		return this;
 	}
 
-	public void addPrato(Prato prato) {
+	public void inserePrato(Prato prato) {
 		this.pratos.add(prato);
 	}
 

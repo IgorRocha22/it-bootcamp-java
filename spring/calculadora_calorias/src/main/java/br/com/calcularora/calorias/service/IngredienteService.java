@@ -25,4 +25,12 @@ public class IngredienteService implements IIngredienteService {
 		}
 		return ingredientes;
 	}
+
+	public Integer calculaTotalCalorias(List<Ingrediente> ingredientes) {
+		return ingredientes.stream().mapToInt(Ingrediente::getCalorias).sum();
+	}
+
+	public Ingrediente recuperaIngredienteMaiorCaloria(List<Ingrediente> ingredientes) {
+		return ingredientes.stream().sorted((o1, o2) -> o2.getCalorias() - o1.getCalorias()).findFirst().orElse(null);
+	}
 }
