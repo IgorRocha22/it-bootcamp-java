@@ -2,7 +2,6 @@ package br.com.personagens.starwars.repository;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -23,27 +22,20 @@ public class StarWarsRepository {
 
 	private StarWarsRepository getInstance() {
 		if (repository == null) {
-			this.starWarsCharacters = fetchStarWarsCharacter();
+			this.starWarsCharacters = readJsonFile();
 		}
 		return this;
 	}
 
-	private List<StarWarsCharacter> fetchStarWarsCharacter() {
+	private List<StarWarsCharacter> readJsonFile() {
 		ObjectMapper objectMapper = new ObjectMapper();
-		List<StarWarsCharacter> charactersJson = new ArrayList<StarWarsCharacter>();
-		charactersJson = readJsonFile(objectMapper, charactersJson);
-		return charactersJson;
-	}
-
-	private List<StarWarsCharacter> readJsonFile(ObjectMapper objectMapper, List<StarWarsCharacter> charactersJson) {
 		try {
-			charactersJson = objectMapper.readValue(new File("src/main/resources/static/starwars.json"),
+			return objectMapper.readValue(new File("src/main/resources/static/starwars.json"),
 					new TypeReference<List<StarWarsCharacter>>() {
 					});
 		} catch (IOException e) {
 			throw new RuntimeException("Erro inesperado durante a leitura do arquivo json\n" + e.getMessage());
 		}
-		return charactersJson;
 	}
 
 	public List<StarWarsCharacter> findByName(String name) {
