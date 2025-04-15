@@ -56,4 +56,7 @@ public class Link {
 		this.password = password;
 	}
 
+	public void incrementCountRedirect() {
+		this.countRedirect += 1;
+	}
 }

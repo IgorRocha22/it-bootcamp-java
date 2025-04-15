@@ -18,6 +18,7 @@ public class LinkRepository {
 	public Link createLink(Link link) {
 		Integer newId = links.size() + 1;
 		link.setId(newId);
+		link.setCountRedirect(0);
 		links.put(newId, link);
 		return link;
 	}

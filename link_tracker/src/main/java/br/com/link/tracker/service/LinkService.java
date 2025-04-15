@@ -23,13 +23,14 @@ public class LinkService {
 	public LinkDto createLink(LinkDto dto) {
 		Link entity = ConvertLinkUtil.toEntity(dto);
 		validate(dto, entity);
-		encodePassword(dto);
+		encodePassword(dto, entity);
 		return ConvertLinkUtil.toDto(repository.createLink(entity));
 	}
 
-	private void encodePassword(LinkDto dto) {
+	private void encodePassword(LinkDto dto, Link entity) {
 		if (dto.password() != null && !dto.password().isEmpty()) {
-			Base64.getEncoder().encode(dto.password().getBytes());
+			String passwordEncoded = Base64.getEncoder().encodeToString(dto.password().getBytes());
+			entity.setPassword(passwordEncoded);
 		}
 	}
 
@@ -40,12 +41,16 @@ public class LinkService {
 		if (!isValidURI(dto.location())) {
 			throw new BusinessException("URL inválida");
 		}
+		if (dto.password() != null && dto.password().length() < 2) {
+			throw new BusinessException("Senha precisa ter ao menos 2 dígitos");
+		}
 		entity.setValid(true);
 	}
 
 	public LinkDto redirect(Integer id, String password) {
 		Link link = repository.findById(id);
 		validateRedirect(id, password, link);
+		link.incrementCountRedirect();
 		return ConvertLinkUtil.toDto(link);
 	}
 
@@ -53,12 +58,15 @@ public class LinkService {
 		if (link == null) {
 			throw new NotFoundException("Link com ID " + id + " não localizado");
 		}
+		if (!link.isValid()) {
+			throw new BusinessException("O link informado não está válido para acesso");
+		}
 		if (link.getPassword() != null) {
 			if (password == null || password.isEmpty()) {
 				throw new BusinessException("Senha não informada");
 			}
-			byte[] passwordDecoded = Base64.getDecoder().decode(link.getPassword());
-			if (passwordDecoded != password.getBytes()) {
+			String passwordEncoded = Base64.getEncoder().encodeToString(password.getBytes());
+			if (!link.getPassword().equals(passwordEncoded)) {
 				throw new BusinessException("Senha incorreta!");
 			}
 		}
@@ -69,7 +77,24 @@ public class LinkService {
 			URI uri = new URI(uriString);
 			return uri.getScheme() != null && uri.getHost() != null;
 		} catch (URISyntaxException e) {
-			return false; // If there's a syntax error, return false
+			return false;
 		}
+	}
+
+	public LinkDto getMetrics(Integer id) {
+		Link link = repository.findById(id);
+		if (link == null) {
+			throw new NotFoundException("Link não localizado com o id " + id);
+		}
+		return ConvertLinkUtil.toDto(link);
+	}
+
+	public LinkDto invalidate(Integer id) {
+		Link link = repository.findById(id);
+		if (link == null) {
+			throw new NotFoundException("Link não localizado com o id " + id);
+		}
+		link.setValid(false);
+		return ConvertLinkUtil.toDto(link);
 	}
 }
